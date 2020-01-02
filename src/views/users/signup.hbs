@@ -5,6 +5,12 @@
         Account Register 
       </div>
       <div class="card-body">
+        {{#each errors}}
+          <p>{{this}}</p>
+        {{/each}}
+        {{#if disallowSignup}}
+        <p>We are sorry, but the sign up is currently closed.</p>
+        {{else}}
         <form action="/users/signup" method="POST">
           <div class="form-group">
             <input type="text" class="form-control" name="name" placeholder="Name" value="{{name}}">
@@ -22,6 +28,7 @@
             Signup 
           </button>
         </form>
+        {{/if}}
       </div>
     </div>
   </div>

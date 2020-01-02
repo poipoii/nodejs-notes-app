@@ -5,20 +5,24 @@ const passport = require('passport');
 const User = require('../models/User');
 
 router.get('/users/signup', (req, res) => {
-  res.render('users/signup');
+  res.render('users/signup', {disallowSignup: !process.env.ALLOW_SIGNUP});
 });
 
 router.post('/users/signup', async (req, res) => {
   let errors = [];
   const { name, email, password, confirm_password } = req.body;
-  if(password != confirm_password) {
-    errors.push({text: 'Passwords do not match.'});
-  }
-  if(password.length < 4) {
-    errors.push({text: 'Passwords must be at least 4 characters.'})
+  if (process.env.ALLOW_SIGNUP) {
+    if(password != confirm_password) {
+      errors.push({text: 'Passwords do not match.'});
+    }
+    if(password.length < 4) {
+      errors.push({text: 'Passwords must be at least 4 characters.'})
+    }
+  } else {
+    errors.push({text: 'We are sorry, but the sign up is currently closed.'})
   }
   if(errors.length > 0){
-    res.render('users/signup', {errors, name, email, password, confirm_password});
+    res.render('users/signup', {errors, name, email, password, confirm_password, disallowSignup: !process.env.ALLOW_SIGNUP});
   } else {
     // Look for email coincidence
     const emailUser = await User.findOne({email: email});

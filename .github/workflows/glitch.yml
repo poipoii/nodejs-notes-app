@@ -1,0 +1,24 @@
+name: Deploy to Glitch
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 10
+    - name: deploy
+      run: |
+        npm install npx sync-glitch-cli
+        npx sync-glitch-cli
+      env:
+        CI: true
+        GLITCH_PROJECT_ID: ${{ secrets.GLITCH_PROJECT_ID }}
+        GLITCH_TOKEN: ${{ secrets.GLITCH_TOKEN }}
+        GH_REPO: ${{ secrets.GH_REPO }}

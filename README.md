@@ -6,3 +6,17 @@ This app can:
 
 # Screenshot
 ![](docs/tasks.png)
+
+## Config
+
+```bash
+ALLOW_SIGNUP=
+SITE_PRIVATE=
+SECRET_KEY=
+MONGOOSE=
+```
+
+* ALLOW_SIGNUP: Enable/Disable signup new account (default: ''. e.g. '1).
+* SITE_PRIVATE: Enable/Disable private site via password (default: ''. e.g. '123@@456').
+* SECRET_KEY: Salt, generate via `npm run salt --silent`.
+* MONGOOSE: MongoDB connection string.

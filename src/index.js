@@ -3,6 +3,8 @@ const exphbs = require('express-handlebars');
 const path = require('path');
 const methodOverride = require('method-override');
 const session = require('express-session');
+const mongoose = require('mongoose');
+const MongoStore = require('connect-mongo')(session);
 const flash = require('connect-flash');
 const passport = require('passport');
 
@@ -28,7 +30,8 @@ app.use(methodOverride('_method'));
 app.use(session({
   secret: 'secret',
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: true,
+  store: new MongoStore({ mongooseConnection: mongoose.connection }),
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -50,6 +53,12 @@ app.use(require('./routes/notes'));
 
 // static files
 app.use(express.static(path.join(__dirname, 'public')));
+
+if (!process.env.SECRET_KEY) {
+  console.error(`Missing SECRET_KEY!
+  npm run salt --silent`);
+  process.exit(1);
+}
 
 // Server is listening
 app.listen(app.get('port'), () => {

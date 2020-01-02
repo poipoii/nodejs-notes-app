@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const Cryptr = require('cryptr');
+
+const cryptr = new Cryptr(process.env.SECRET_KEY);
 const { Schema } = mongoose;
 
 const NoteSchema = new Schema({
@@ -8,7 +11,9 @@ const NoteSchema = new Schema({
   },
   description: {
     type: String,
-    required: true
+    required: true,
+    get: v => cryptr.decrypt(v),
+    set: v => cryptr.encrypt(v),
   },
   date: {
     type: Date,
