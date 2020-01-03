@@ -7,3 +7,8 @@ body {
 .logo {
   width: 30%;
 }
+
+.node-description {
+  word-break: break-word;
+  white-space: pre-wrap;
+}
